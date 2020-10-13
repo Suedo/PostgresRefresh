@@ -1,0 +1,62 @@
+# basic connection
+psql -p 5432 -h localhost -d northwind -U postgres
+
+# --------------------------------------------------------------------------------
+# avoid manually typing parameters for psql connection
+# --------------------------------------------------------------------------------
+
+1. set environment variables
+  export PGHOST = <host name> // ex: localhost
+  export PGPORT = 5432 .. etc
+  export PGUSER = <username>
+  export PGDATABASE = <db name>
+
+
+2. create a .pgpass file
+  this file will have a line of the format:
+
+    hostname:port:database:username:password
+
+    give these values, and it will be used by psql during connection
+
+3. create a .pg_service.conf file
+  This will be a file, with many services configured. format:
+
+    [service_1]
+    host=localhost
+    port=5432
+    dbname=test
+    user=postgres
+    password=abc
+
+    [service_2]
+    host=localhost
+    port=5432
+    dbname=foobar
+    user=suedo
+    password=foo123
+
+  USAGE:
+    psql service=service_1
+
+# --------------------------------------------------------------------------------
+# checking dbs in psql
+# --------------------------------------------------------------------------------
+
+1. psql postgres   # login using postgres user
+2. \l              # lists all databases
+3. \! <command>    # allows you to run host system commands, like clear, for clearing the screen
+    ex: \! clear         # will clear the screen
+4. \c <dbname>      # connect to dbname db.
+
+# --------------------------------------------------------------------------------
+# checking schemas in psql
+# --------------------------------------------------------------------------------
+
+1. \c <dbname>      # connect to dbname
+2. \dn              # list out schemas
+3. \dt <schema>.    # list of tables under schema, the `.` at the end is needed
+4. <query>;         # the query needs to end with semicolon `;`, else wont get op, and will hang
+  example: 
+    AdventureWorks-# select * from sales.store limit 10;
+    # ^^ connected to AdventureWorks db, and getting 10 records from store table of sales schema.
